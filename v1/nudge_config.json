@@ -1,0 +1,54 @@
+{
+    "metadata": {
+        "last_update_hash": "",
+        "blackout_periods": [
+            {
+                "start": "4/21",
+                "end": "5/18",
+                "comment": "Winter semester blackout"
+            },
+            {
+                "start": "12/02",
+                "end": "12/27",
+                "comment": "Fall semester blackout"
+            }
+        ],
+        "note_template": "⚠️  Updates must be installed prior to {}  ⚠️"
+    },
+    "optionalFeatures": {
+        "acceptableAssertionUsage": true,
+        "acceptableCameraUsage": true,
+        "acceptableScreenSharingUsage": true,
+        "attemptToCheckForSupportedDevice": false,
+        "attemptToFetchMajorUpgrade": false,
+        "disableSoftwareUpdateWorkflow": true
+    },
+    "osVersionRequirements": [
+        {
+            "aboutUpdateURL": "https://kb.uwec.edu/articles/macos-macos-software-update",
+            "requiredInstallationDate": "",
+            "requiredMinimumOSVersion": ""
+        }
+    ],
+    "userExperience": {
+        "allowLaterDeferralButton": false,
+        "approachingWindowTime": 10000
+    },
+    "userInterface": {
+        "actionButtonPath": "/System/Library/PreferencePanes/Softwareupdate.prefpane",
+        "iconDarkPath": "/Library/UWEC/uwec_jamf_connect_verify_logo_notext.png",
+        "iconLightPath": "/Library/UWEC/uwec_jamf_connect_verify_logo_notext.png",
+        "showDeferralCount": true,
+        "updateElements": [
+            {
+                "_language": "en",
+                "actionButtonText": "Install Update Now",
+                "mainContentHeader": "Your Mac will be restarted during this update.",
+                "mainContentNote": "⚠️  Updates must be installed prior to  ⚠️",
+                "mainContentText": "Keeping macOS up to date is necessary to protect your Mac and provide you with the best user experience possible.\\n\\nClick on the 'Install Update Now' button above to open the Software Update preferences and click 'Update Now' to begin the installation.\\n\\nYou may delay the update to a later time up until the deadline by clicking 'I understand' then the 'Defer' menu below. This will become unavailable after the deadline and your computer will restrict usage until the Update is run.",
+                "mainHeader": "Your UWEC Mac Requires a macOS Update",
+                "subHeader": "A friendly reminder from your UWEC LTS team"
+            }
+        ]
+    }
+}
