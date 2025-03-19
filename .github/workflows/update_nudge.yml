@@ -21,6 +21,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             NUDGE_FORCE_UPDATE: ${{ github.event.inputs.force_update }}
+        environment: production
         steps:
             - name: Check out repo
               uses: actions/checkout@v4
