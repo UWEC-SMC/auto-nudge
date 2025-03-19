@@ -14,7 +14,7 @@ on:
                     - "True"
                     - "False"
 env:
-    CONFIG_PATH: "/v1/nudge_config.json"
+    CONFIG_PATH: "v1/nudge_config.json"
     PYTHON_VERSION: "3.12"
 jobs:
     update_nudge:
