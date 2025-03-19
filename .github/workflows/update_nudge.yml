@@ -46,7 +46,7 @@ jobs:
 
             - name: Check if nudge_config.json has been modified
               run: |
-                if ! git diff --quiet $CONFIG_PATH; then
+                if ! git diff --quiet ${{ env.CONFIG_PATH }}; then
                   echo "CONFIG_CHANGED=true" >> $GITHUB_ENV
                 else
                   echo "CONFIG_CHANGED=false" >> $GITHUB_ENV
@@ -55,10 +55,10 @@ jobs:
             - name: Change detected - commit and push changes
               if: env.CONFIG_CHANGED == 'true'
               run: |
-                echo "Change detected in $CONFIG_PATH. Saving changes."
+                echo "Change detected in ${{ env.CONFIG_PATH }}. Saving changes."
                 git config --global user.name "github-actions[bot]"
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                git add $CONFIG_PATH
+                git add ${{ env.CONFIG_PATH }}
                 git commit -m ${{ env.COMMIT_MSG }}
                 git push
             
