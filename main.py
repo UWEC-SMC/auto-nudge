@@ -171,9 +171,9 @@ def main():
             commit_msg: str
 
             if config_updated:
-                commit_msg = f"Updated required_minimum_os_version to {nudge_config.os_version_requirements[0].required_minimum_os_version}"
+                commit_msg = f"Update required_minimum_os_version to {nudge_config.os_version_requirements[0].required_minimum_os_version}"
             else:
-                commit_msg = f"Updated last_update_hash"
+                commit_msg = f"Update last_update_hash"
 
             new_version = f"COMMIT_MSG='{commit_msg}'"
             env.write(f"{new_version}\n")
