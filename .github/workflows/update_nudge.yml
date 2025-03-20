@@ -69,7 +69,7 @@ jobs:
                 git add ${{ env.CONFIG_PATH }}
                 git commit -m ${{ env.COMMIT_MSG }}
                 git push --set-upstream origin working-branch
-                gh pr create --base main --head working-branch
+                gh pr create --base main --head working-branch --fill
             
             - name: No change detected
               if: env.CONFIG_CHANGED == 'false'
