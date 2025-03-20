@@ -6,10 +6,13 @@ on:
             - main
 jobs:
     post_merge_job:
+        if: github.actor != 'github-actions[bot]'
         runs-on: ubuntu-latest
+        env:
+            AUTO_NUDGE_BRANCH_PREFIX: auto-nudge
         steps:
             - name: Checkout repo
-              uses: actions/checkout@4
+              uses: actions/checkout@v4
               with:
                 fetch-depth: 1
             
@@ -19,6 +22,9 @@ jobs:
                 echo "Merged branch: $MERGED_BRANCH"
                 echo "MERGED_BRANCH=$MERGED_BRANCH" >> $GITHUB_ENV
             
-            - name: Delete old branch
+            - name: Delete old ${{ env.AUTO_NUDGE_BRANCH_PREFIX }} branch
               run: |
-                git branch -D ${{ env.MERGED_BRANCH }}
+                if [[ ${{ env.MERGED_BRANCH }} == *${{ env.AUTO_NUDGE_BRANCH_PREFIX }}* ]]; then
+                    git branch -d ${{ env.MERGED_BRANCH }}
+                else
+                    echo "Merged branch isn't an auto-nudge update."
