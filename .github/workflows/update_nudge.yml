@@ -23,6 +23,7 @@ jobs:
     update_nudge:
         runs-on: ubuntu-latest
         env:
+            AUTO_NUDGE_BRANCH_PREFIX: auto-nudge
             NUDGE_FORCE_UPDATE: ${{ github.event.inputs.force_update }}
             GH_TOKEN: ${{ github.token }}
         steps:
@@ -49,7 +50,7 @@ jobs:
 
             - name: Create working branch
               run: | 
-                BRANCH_NAME="auto-nudge-$(date +'%Y%m%d-%H%M%S')"
+                BRANCH_NAME="${{ env.AUTO_NUDGE_BRANCH_PREFIX }}-$(date +'%Y%m%d-%H%M%S')"
                 echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
                 git checkout -b $BRANCH_NAME
 
