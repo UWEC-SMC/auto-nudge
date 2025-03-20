@@ -16,13 +16,8 @@ jobs:
               with:
                 fetch-depth: 1
             
-            - name: Get merged branch name
+            - name: Delete ${{ env.AUTO_NUDGE_BRANCH_PREFIX }} branch
+              if: contains(github.event.pull_request.head.ref, env.AUTO_NUDGE_BRANCH_PREFIX)
               run: |
-                MERGED_BRANCH=$(git log --merges --oneline --first-parent -n 1 | awk '{print $NF}')
-                echo "Merged branch: $MERGED_BRANCH"
-                echo "JSON: ${{ toJson(github.event.pull_request) }}"
-                echo "MERGED_BRANCH=$MERGED_BRANCH" >> $GITHUB_ENV
-            
-            # - name: Delete old ${{ env.AUTO_NUDGE_BRANCH_PREFIX }} branch
-            #   if: contains(env.MERGED_BRANCH, env.AUTO_NUDGE_BRANCH_PREFIX)
-            #   run: git branch -d ${{ env.MERGED_BRANCH }}
+                git branch -d ${{ github.event.pull_request.head.ref }}
+                git push
