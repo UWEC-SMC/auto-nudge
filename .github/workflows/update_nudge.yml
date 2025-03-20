@@ -1,4 +1,4 @@
-name: Auto-Nudge
+name: Run Auto-Nudge
 run-name: ${{ github.actor }} running Auto-Nudge
 on:
     schedule:
