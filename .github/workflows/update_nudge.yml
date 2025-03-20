@@ -16,6 +16,9 @@ on:
 env:
     CONFIG_PATH: "v1/nudge_config.json"
     PYTHON_VERSION: "3.12"
+concurrency: 
+    group: auto-nudge-${{ github.ref }}
+    cancel-in-progress: false
 jobs:
     update_nudge:
         runs-on: ubuntu-latest
