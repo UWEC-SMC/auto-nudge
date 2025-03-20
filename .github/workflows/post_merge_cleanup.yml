@@ -19,5 +19,4 @@ jobs:
             - name: Delete ${{ env.AUTO_NUDGE_BRANCH_PREFIX }} branch
               if: contains(github.event.pull_request.head.ref, env.AUTO_NUDGE_BRANCH_PREFIX)
               run: |
-                git branch -d ${{ github.event.pull_request.head.ref }}
-                git push
+                git push origin --delete ${{ github.event.pull_request.head.ref }}
