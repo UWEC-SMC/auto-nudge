@@ -45,6 +45,9 @@ jobs:
             - name: Install dependencies
               run: pip install -r requirements.txt
 
+            - name: Create working branch
+              run: git checkout -b working-branch
+
             - name: Run Python script
               run: python main.py
 
@@ -65,6 +68,7 @@ jobs:
                 git add ${{ env.CONFIG_PATH }}
                 git commit -m ${{ env.COMMIT_MSG }}
                 git push
+                gh pr create --base main --head working-branch
             
             - name: No change detected
               if: env.CONFIG_CHANGED == 'false'
