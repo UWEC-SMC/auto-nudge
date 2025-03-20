@@ -67,7 +67,7 @@ jobs:
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
                 git add ${{ env.CONFIG_PATH }}
                 git commit -m ${{ env.COMMIT_MSG }}
-                git push
+                git push --set-upstream origin working-branch
                 gh pr create --base main --head working-branch
             
             - name: No change detected
