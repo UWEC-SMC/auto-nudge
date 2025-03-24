@@ -1,0 +1,34 @@
+name: Auto-Nudge Invoker
+run-name: ran to determine if auto-nudge should be invoked
+on:
+    schedule:
+        - cron: "0 0,12 * * *" # Runs at midnight and noon UTC
+    workflow_dispatch:
+env:
+    GH_TOKEN: ${{ github.token }}
+    AUTO_NUDGE_BRANCH_PREFIX: auto-nudge
+jobs:
+    check_if_auto_nudge_should_run:
+        runs-on: ubuntu-latest
+        outputs:
+            PENDING_PR: ${{ steps.check_pending.outputs.PENDING_PR }}
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 1
+
+            - name: Check for pending pull requests
+              id: check_pending
+              run: |
+                pending_prs=$(gh pr list -S '${{ env.AUTO_NUDGE_BRANCH_PREFIX }}')
+                if [[ -n "$pending_prs" ]]; then
+                  echo "PENDING_PR=true" >> $GITHUB_OUTPUT
+                else
+                    echo "PENDING_PR=false" >> $GITHUB_OUTPUT
+                fi  
+              
+    invoke_nudge:
+        needs: check_if_auto_nudge_should_run
+        if: ${{ needs.check_if_auto_nudge_should_run.outputs.PENDING_PR == 'false' }}
+        uses: ./.github/workflows/update_nudge.yml

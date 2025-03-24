@@ -1,0 +1,22 @@
+name: Post-merge cleanup
+run-name: cleaned up working branches
+on:
+    pull_request:
+      types:
+        - closed
+jobs:
+    post_merge_job:
+        if: github.event.pull_request.merged
+        runs-on: ubuntu-latest
+        env:
+            AUTO_NUDGE_BRANCH_PREFIX: auto-nudge
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 1
+            
+            - name: Delete ${{ env.AUTO_NUDGE_BRANCH_PREFIX }} branch
+              if: contains(github.event.pull_request.head.ref, env.AUTO_NUDGE_BRANCH_PREFIX)
+              run: |
+                git push origin --delete ${{ github.event.pull_request.head.ref }}
