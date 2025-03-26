@@ -1,20 +1,4 @@
 {
-    "metadata": {
-        "last_update_hash": "",
-        "blackout_periods": [
-            {
-                "start": "4/21",
-                "end": "5/18",
-                "comment": "Winter semester blackout"
-            },
-            {
-                "start": "12/02",
-                "end": "12/27",
-                "comment": "Fall semester blackout"
-            }
-        ],
-        "note_template": "⚠️  Updates must be installed prior to {}  ⚠️"
-    },
     "optionalFeatures": {
         "acceptableAssertionUsage": true,
         "acceptableCameraUsage": true,
@@ -26,8 +10,8 @@
     "osVersionRequirements": [
         {
             "aboutUpdateURL": "https://kb.uwec.edu/articles/macos-macos-software-update",
-            "requiredInstallationDate": "",
-            "requiredMinimumOSVersion": ""
+            "requiredInstallationDate": "2025-04-02T00:00:00Z",
+            "requiredMinimumOSVersion": "15.3.2"
         }
     ],
     "userExperience": {
@@ -44,11 +28,27 @@
                 "_language": "en",
                 "actionButtonText": "Install Update Now",
                 "mainContentHeader": "Your Mac will be restarted during this update.",
-                "mainContentNote": "⚠️  Updates must be installed prior to  ⚠️",
+                "mainContentNote": "⚠️  Updates must be installed prior to Wednesday, April 2nd, 2025  ⚠️",
                 "mainContentText": "Keeping macOS up to date is necessary to protect your Mac and provide you with the best user experience possible.\\n\\nClick on the 'Install Update Now' button above to open the Software Update preferences and click 'Update Now' to begin the installation.\\n\\nYou may delay the update to a later time up until the deadline by clicking 'I understand' then the 'Defer' menu below. This will become unavailable after the deadline and your computer will restrict usage until the Update is run.",
                 "mainHeader": "Your UWEC Mac Requires a macOS Update",
                 "subHeader": "A friendly reminder from your UWEC LTS team"
             }
         ]
+    },
+    "metadata": {
+        "last_update_hash": "b22e6e345eb5182d81798de187ab72af8af1f5b8ebf4aa46f6c3e0eced5fff07",
+        "blackout_periods": [
+            {
+                "start": "4/21",
+                "end": "5/18",
+                "comment": "Winter semester blackout"
+            },
+            {
+                "start": "12/02",
+                "end": "12/27",
+                "comment": "Fall semester blackout"
+            }
+        ],
+        "note_template": "⚠️  Updates must be installed prior to {}  ⚠️"
     }
 }
