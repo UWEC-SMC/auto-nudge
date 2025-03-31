@@ -167,7 +167,7 @@ def main():
 
     # Check if we need to update our nudge configuration.
     if cache.last_update_hash == sofa_feed.update_hash and not FORCE_UPDATE:
-        print("Nudge config already targeting current SOFA feed release. Exiting.")
+        print(f"Nudge config already targeting current SOFA feed release {cache.last_update_hash}. Exiting.")
         exit(0)
     else:
         print(f"New SOFA feed release detected, hash {sofa_feed.update_hash}")
