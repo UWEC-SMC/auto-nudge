@@ -1,7 +1,5 @@
-/models/__pycache__
 /.idea
 /.vscode
 .env
 .DS_Store
-.auto_nudge_cache.json
-
+/models/__pycache__

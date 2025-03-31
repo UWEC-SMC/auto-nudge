@@ -1,13 +1,9 @@
 import os
-from pathlib import Path
-
 import backoff
 import requests
 
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-
-from models.auto_nudge_cache import AutoNudgeCache
 from models.nudge_config import NudgeConfig
 from models.macos_sofa_feed import MacSofaFeed
 from num2words import num2words
@@ -20,7 +16,6 @@ load_dotenv()
 MACOS_SOFA_FEED_URL = os.getenv("MACOS_SOFA_FEED_URL", "https://sofafeed.macadmins.io/v1/macos_data_feed.json")
 NUDGE_CONFIG_PATH = os.getenv("NUDGE_CONFIG_PATH", "./v1/nudge_config.json")
 FORCE_UPDATE = True if os.getenv("NUDGE_FORCE_UPDATE", "false").lower() == "true" else False
-CACHE_PATH = os.getenv("AUTO_NUDGE_CACHE_PATH", ".auto_nudge_cache.json")
 
 
 @backoff.on_exception(backoff.expo, (Timeout, ConnectionError), max_tries=3)
@@ -44,14 +39,14 @@ def get_nudge_config(config_path: str) -> NudgeConfig:
     """Retrieves and validates the Nudge configuration from the provided path.
 
     Args:
-        config_path (str): The path from which to retrieve the Nudge configuration.
+        config_path (str): The path from which to retrive the Nudge configuration.
 
     Returns:
         NudgeConfig: Validate Nudge Configu object
     """
     print(f"Retrieving Nudge configuration from {config_path}")
     with open(config_path, "r", encoding="utf-8") as json:
-        return NudgeConfig.model_validate_json(json.read(), strict=True)
+        return NudgeConfig.model_validate_json(json.read())
 
 
 def is_within_blackout(config: NudgeConfig) -> Tuple[bool, Optional[str]]:
@@ -70,34 +65,6 @@ def is_within_blackout(config: NudgeConfig) -> Tuple[bool, Optional[str]]:
 
     return False, None
 
-
-def get_cache(path: str) -> AutoNudgeCache:
-    """
-    Retrieves the current cache from the provided file path. If the cache isn't present, a new one will be created.
-
-    Args:
-        path (str): The file path to retrieve the cache from.
-
-    Returns:
-        AutoNudgeCache: The current cache. If none is present, a newly initialized cache will be returned.
-    """
-    cache_path = Path(path)
-    cache: AutoNudgeCache
-
-    print(f"Checking for existing cache at {cache_path}")
-    if cache_path.is_file():
-        print("Cache hit")
-    else:
-        print("No cache present - creating one")
-        open(cache_path, 'w').close() # Create empty file
-
-    with open(cache_path) as file:
-        try:
-            cache = AutoNudgeCache.model_validate_json(file.read())
-        except ValidationError as e:
-            cache = AutoNudgeCache()
-
-    return cache
 
 def should_update_config(feed: MacSofaFeed, config: NudgeConfig) -> bool:
     """Checks if the Nudge configuration requires updating. This is done by checking if the latest version
@@ -150,9 +117,7 @@ def main():
     sofa_feed: MacSofaFeed
     nudge_config: NudgeConfig
     config_updated = False
-    cache = get_cache(CACHE_PATH)
 
-    # Retrieve macOS SOFA feed
     try:
         sofa_feed = get_feed(MACOS_SOFA_FEED_URL)
     except ValidationError as e:
@@ -165,14 +130,6 @@ def main():
         print(f"Error occurred while attempting to pull the SOFA feed: {e}")
         exit(1)
 
-    # Check if we need to update our nudge configuration.
-    if cache.last_update_hash == sofa_feed.update_hash:
-        print("Nudge config already targeting current SOFA feed release. Exiting.")
-        exit(0)
-    else:
-        print(f"New SOFA feed release detected, hash {sofa_feed.update_hash}")
-
-    # Retrieve nudge config
     try:
         nudge_config = get_nudge_config(NUDGE_CONFIG_PATH)
     except Exception as e:
@@ -180,30 +137,32 @@ def main():
         exit(1)
 
     in_blackout, reason = is_within_blackout(nudge_config)
-
     if in_blackout and not FORCE_UPDATE:
         print(f"Currently within blackout period: {reason}. Exiting.")
         exit(0)
 
     print("Outside blackout period - safe to proceed")
+    # Check if we need to update our nudge configuration.
+    if sofa_feed.update_hash == nudge_config.metadata.last_update_hash:
+        print("Nudge config already targeting current SOFA feed release. Exiting.")
+        exit(0)
+    else:
+        print(f"New SOFA feed release detected, hash {sofa_feed.update_hash}")
 
     # Update our metadata and update the nudge configuration if necessary.
-    cache.last_update_hash = sofa_feed.update_hash
+    nudge_config.metadata.last_update_hash = sofa_feed.update_hash
 
     if should_update_config(sofa_feed, nudge_config) or FORCE_UPDATE:
         print("Nudge configuration requires updating")
         update_config(sofa_feed, nudge_config)
         config_updated = True
+    else:
+        print("No changes to configuration necessary - updating last_update_hash metadata")
 
     # Write changes and update workflow variables
     print(f"Writing changes to {NUDGE_CONFIG_PATH}")
     with open(NUDGE_CONFIG_PATH, "w") as file:
         file.write(nudge_config.model_dump_json(indent=4, exclude_none=True, by_alias=True))
-
-    # Update cache
-    print(f"Updating cache")
-    with open(CACHE_PATH, "w") as file:
-        file.write(cache.model_dump_json())
 
     print("Determining runtime environment")
     if os.getenv("GITHUB_ACTIONS"):
@@ -213,16 +172,19 @@ def main():
 
             if config_updated:
                 commit_msg = f"Update required_minimum_os_version to {nudge_config.os_version_requirements[0].required_minimum_os_version}"
+            else:
+                commit_msg = f"Update last_update_hash"
 
-            env_var = f"COMMIT_MSG='{commit_msg}'"
-            env.write(f"{env_var}\n")
+            new_version = f"COMMIT_MSG='{commit_msg}'"
+            env.write(f"{new_version}\n")
     else:
         print(f"Local environment detected. Printing results.")
         print("")
-        print(f"SOFA Feed Hash: {cache.last_update_hash}")
-        print(f"Config updated: {config_updated}")
-        print(f"Targeted version: {nudge_config.os_version_requirements[0].required_minimum_os_version}")
-        print(f"Deadline: {nudge_config.os_version_requirements[0].required_installation_date}")
+        print(f"SOFA Feed Hash: {nudge_config.metadata.last_update_hash}")
+
+        if config_updated:
+            print(f"Targeted version: {nudge_config.os_version_requirements[0].required_minimum_os_version}")
+            print(f"Deadline: {nudge_config.os_version_requirements[0].required_installation_date}")
 
     # Done
     exit(0)
