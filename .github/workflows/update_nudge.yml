@@ -50,7 +50,7 @@ jobs:
             - name: Load/Create Auto-Nudge cache
               uses: actions/cache@v4
               with:
-                path: ~/.auto_nudge_cache.json
+                path: ./.auto_nudge_cache.json
                 key: ${{ runner.os }}-auto-nudge-cache
 
             - name: Create working branch
