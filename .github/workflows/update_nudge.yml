@@ -72,10 +72,3 @@ jobs:
                 git commit -m "${{env.AUTO_NUDGE_BRANCH_PREFIX}}: ${{ env.COMMIT_MSG }}"
                 git push --set-upstream origin ${{ env.BRANCH_NAME }}
                 gh pr create --base main --head ${{ env.BRANCH_NAME }} --fill
-            
-            - name: No change detected
-              if: env.CONFIG_CHANGED == 'False'
-              run : |
-                echo "No change detected."
-                git branch -D ${{ env.BRANCH_NAME }}
-
