@@ -10,8 +10,8 @@
     "osVersionRequirements": [
         {
             "aboutUpdateURL": "https://kb.uwec.edu/articles/macos-macos-software-update",
-            "requiredInstallationDate": "2025-04-02T00:00:00Z",
-            "requiredMinimumOSVersion": "15.3.2"
+            "requiredInstallationDate": "",
+            "requiredMinimumOSVersion": ""
         }
     ],
     "userExperience": {
@@ -36,7 +36,6 @@
         ]
     },
     "metadata": {
-        "last_update_hash": "cc76c3652e8d430d582c461ffdb6b97a4f5514e2a1f6473173e861a5d4b87771",
         "blackout_periods": [
             {
                 "start": "4/21",
