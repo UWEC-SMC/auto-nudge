@@ -597,10 +597,6 @@ class BlackoutPeriod(BaseModel):
 
 
 class NudgeMetadata(BaseModel):
-    last_update_hash: str = Field(
-        None,
-        description="The update hash of the last processed SOFA feed update.",
-    )
     blackout_periods: List[BlackoutPeriod] = Field(
         None, description="A collection start & end dates for when the nudge config should NOT be updated."
     )
