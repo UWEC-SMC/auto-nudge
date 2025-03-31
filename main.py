@@ -215,6 +215,11 @@ def main():
                 commit_msg = f"Update required_minimum_os_version to {nudge_config.os_version_requirements[0].required_minimum_os_version}"
 
             env_var = f"COMMIT_MSG='{commit_msg}'"
+            print(env_var)
+            env.write(f"{env_var}\n")
+
+            env_var = f"CONFIG_CHANGED='{config_updated}"
+            print(env_var)
             env.write(f"{env_var}\n")
     else:
         print(f"Local environment detected. Printing results.")

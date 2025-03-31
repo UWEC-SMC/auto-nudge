@@ -61,15 +61,9 @@ jobs:
 
             - name: Run Python script
               run: python main.py
-
-            - name: Check if nudge_config.json has been modified
-              run: |
-                if ! git diff --quiet ${{ env.CONFIG_PATH }}; then
-                  echo "CONFIG_CHANGED=true" >> $GITHUB_ENV
-                fi
             
             - name: Change detected - commit and push changes
-              if: env.CONFIG_CHANGED
+              if: env.CONFIG_CHANGED == 'True'
               run: |
                 echo "Change detected in ${{ env.CONFIG_PATH }}. Saving changes."
                 git config --global user.name "github-actions[bot]"
@@ -80,7 +74,7 @@ jobs:
                 gh pr create --base main --head ${{ env.BRANCH_NAME }} --fill
             
             - name: No change detected
-              if: env.CONFIG_CHANGED == 'false'
+              if: env.CONFIG_CHANGED == 'False'
               run : |
                 echo "No change detected."
                 git branch -D ${{ env.BRANCH_NAME }}
