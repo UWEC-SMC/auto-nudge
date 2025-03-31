@@ -218,7 +218,7 @@ def main():
             print(env_var)
             env.write(f"{env_var}\n")
 
-            env_var = f"CONFIG_CHANGED='{config_updated}'"
+            env_var = f"CONFIG_CHANGED={config_updated}"
             print(env_var)
             env.write(f"{env_var}\n")
     else:
