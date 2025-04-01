@@ -209,7 +209,7 @@ def main():
     if os.getenv("GITHUB_ACTIONS"):
         print(f"Github environment detected. Setting environment variables.")
         with open(os.environ["GITHUB_ENV"], "a") as env:
-            commit_msg: str
+            commit_msg = ""
 
             if config_updated:
                 commit_msg = f"Update required_minimum_os_version to {nudge_config.os_version_requirements[0].required_minimum_os_version}"
