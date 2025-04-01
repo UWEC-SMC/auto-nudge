@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from models.auto_nudge_cache import AutoNudgeCache
 from models.nudge_config import NudgeConfig
-from models.macos_sofa_feed import MacSofaFeed
+from models.macos_sofa_feed import MacSofaFeed, SecurityRelease
 from num2words import num2words
 from pydantic import ValidationError
 from requests.exceptions import Timeout, ConnectionError
@@ -127,15 +127,19 @@ def update_config(feed: MacSofaFeed, config: NudgeConfig) -> None:
     print("Updating Nudge configuration")
     # Actionable changes detected. Update our config as necessary.
     # Update target version
+    current_target_version = config.os_version_requirements[0].required_minimum_os_version
     config.os_version_requirements[0].required_minimum_os_version = feed.os_versions[0].latest.product_version
 
     # Update install deadline
-    # Set our offset to 2 weeks by default, or 1 week if the new version resolves an actively exploited CVE
-    deadline_offset = (
-        timedelta(weeks=2)
-        if len(feed.os_versions[0].security_releases[0].actively_exploited_cves) == 0
-        else timedelta(weeks=1)
-    )
+    deadline_offset: timedelta
+    current_target_data: SecurityRelease = list(filter(lambda x: x.product_version == current_target_version, feed.os_versions[0].security_releases))[0]
+
+    if len(current_target_data.actively_exploited_cves) > 0:
+        deadline_offset = timedelta(weeks=1)
+    else:
+        deadline_offset = timedelta(weeks=2)
+
+
     install_deadline = datetime.now() + deadline_offset
     config.os_version_requirements[0].required_installation_date = install_deadline.strftime("%Y-%m-%dT00:00:00Z")
 
