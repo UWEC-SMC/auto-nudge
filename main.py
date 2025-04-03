@@ -197,12 +197,14 @@ def main():
     if should_update_config(sofa_feed, nudge_config) or FORCE_UPDATE:
         print("Nudge configuration requires updating")
         update_config(sofa_feed, nudge_config)
-        config_updated = True
 
-    # Write changes and update workflow variables
-    print(f"Writing changes to {NUDGE_CONFIG_PATH}")
-    with open(NUDGE_CONFIG_PATH, "w") as file:
-        file.write(nudge_config.model_dump_json(indent=4, exclude_none=True, by_alias=True))
+        print(f"Writing changes to {NUDGE_CONFIG_PATH}")
+        with open(NUDGE_CONFIG_PATH, "w") as file:
+            file.write(nudge_config.model_dump_json(indent=4, exclude_none=True, by_alias=True))
+
+        config_updated = True
+    else:
+        print("No changes required.")
 
     # Update cache
     print(f"Updating cache")
