@@ -38,8 +38,8 @@
     "metadata": {
         "blackout_periods": [
             {
-                "start": "4/21",
-                "end": "5/18",
+                "start": "5/5",
+                "end": "5/21",
                 "comment": "Winter semester blackout"
             },
             {
