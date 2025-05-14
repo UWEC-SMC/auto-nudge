@@ -10,8 +10,8 @@
     "osVersionRequirements": [
         {
             "aboutUpdateURL": "https://kb.uwec.edu/articles/macos-macos-software-update",
-            "requiredInstallationDate": "2025-04-24T00:00:00Z",
-            "requiredMinimumOSVersion": "15.4.1"
+            "requiredInstallationDate": "2025-05-28T00:00:00Z",
+            "requiredMinimumOSVersion": "15.5"
         }
     ],
     "userExperience": {
@@ -28,7 +28,7 @@
                 "_language": "en",
                 "actionButtonText": "Install Update Now",
                 "mainContentHeader": "Your Mac will be restarted during this update.",
-                "mainContentNote": "⚠️  Updates must be installed prior to Thursday, April 24th, 2025  ⚠️",
+                "mainContentNote": "⚠️  Updates must be installed prior to Wednesday, May 28th, 2025  ⚠️",
                 "mainContentText": "Keeping macOS up to date is necessary to protect your Mac and provide you with the best user experience possible.\\n\\nClick on the 'Install Update Now' button above to open the Software Update preferences and click 'Update Now' to begin the installation.\\n\\nYou may delay the update to a later time up until the deadline by clicking 'I understand' then the 'Defer' menu below. This will become unavailable after the deadline and your computer will restrict usage until the Update is run.",
                 "mainHeader": "Your UWEC Mac Requires a macOS Update",
                 "subHeader": "A friendly reminder from your UWEC LTS team"
